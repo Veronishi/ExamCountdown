@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ExamCountdown</string>
+    <string name="tab_text_1">Future</string>
+    <string name="tab_text_2">Past</string>
+</resources>
