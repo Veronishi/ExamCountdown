@@ -2,4 +2,8 @@
     <string name="app_name">ExamCountdown</string>
     <string name="tab_text_1">Future</string>
     <string name="tab_text_2">Past</string>
+    <string name="text_1">Subject</string>
+    <string name="text_2">Name</string>
+    <string name="field_1">ex. Mathematics</string>
+    <string name="field_2">ex. Algebra</string>
 </resources>
