@@ -11,7 +11,7 @@
         android:theme="@style/Theme.ExamCountdown">
 
         <activity
-            android:name=".ExamCreation"
+            android:name=".ExamCreate"
             android:exported="true"
             android:parentActivityName=".MainActivity"/>
 

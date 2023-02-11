@@ -6,4 +6,6 @@
     <string name="text_2">Name</string>
     <string name="field_1">ex. Mathematics</string>
     <string name="field_2">ex. Algebra</string>
+    <string name="date_format">dd/mm/yyyy</string>
+    <string name="string_format">hh:mm</string>
 </resources>
