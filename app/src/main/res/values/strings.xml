@@ -8,4 +8,5 @@
     <string name="field_2">ex. Algebra</string>
     <string name="date_format">dd/mm/yyyy</string>
     <string name="string_format">hh:mm</string>
+    <string name="appearance">Appearance</string>
 </resources>

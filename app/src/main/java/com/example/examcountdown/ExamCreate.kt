@@ -2,20 +2,28 @@ package com.example.examcountdown
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.nvt.color.ColorPickerDialog
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ExamCreate : AppCompatActivity() {
 
+    //clickable
     private lateinit var btnPickDate : TextView
     private lateinit var btnPickTime : TextView
+    private lateinit var btnAppearance : TextView
+    private lateinit var btnIcon : ImageButton
+    //formatting
     private var formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
     private var formatTime = SimpleDateFormat("HH:mm")
 
@@ -61,5 +69,30 @@ class ExamCreate : AppCompatActivity() {
             }, hour, min, true).show()
         }
 
+        //appearance
+        btnAppearance = findViewById(R.id.textView3)
+        btnIcon = findViewById(R.id.imageButton)
+
+        btnAppearance.setOnClickListener {
+            changeAppearance()
+        }
+    }
+
+    private fun changeAppearance() {
+        val colorPicker = ColorPickerDialog(
+            this,
+            Color.BLACK, // color init
+            true, // true is show alpha
+            object : ColorPickerDialog.OnColorPickerListener {
+                override fun onCancel(dialog: ColorPickerDialog?) {
+                    // handle click button Cancel
+                }
+
+                override fun onOk(dialog: ColorPickerDialog?, colorPicker: Int) {
+                    // handle click button OK
+                    btnIcon.setBackgroundColor(colorPicker)
+                }
+            })
+        colorPicker.show()
     }
 }
