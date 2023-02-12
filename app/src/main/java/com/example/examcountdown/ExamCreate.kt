@@ -76,6 +76,9 @@ class ExamCreate : AppCompatActivity() {
         btnAppearance.setOnClickListener {
             changeAppearance()
         }
+        btnIcon.setOnClickListener {
+            changeAppearance()
+        }
     }
 
     private fun changeAppearance() {
