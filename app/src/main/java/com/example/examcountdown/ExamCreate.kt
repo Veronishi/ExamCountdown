@@ -4,13 +4,18 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
+import android.os.Binder
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.examcountdown.databinding.ActivityMainBinding
+//import com.google.firebase.database.DatabaseReference
+//import com.google.firebase.database.FirebaseDatabase
 import com.nvt.color.ColorPickerDialog
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
@@ -18,6 +23,9 @@ import java.util.*
 
 class ExamCreate : AppCompatActivity() {
 
+    //firebase
+    //private lateinit var binding : ActivityMainBinding
+    //private lateinit var database : DatabaseReference
     //clickable
     private lateinit var btnPickDate : TextView
     private lateinit var btnPickTime : TextView
@@ -82,23 +90,35 @@ class ExamCreate : AppCompatActivity() {
         }
 
         //exam creation
-        var subjectView : TextView = findViewById(R.id.editTextTextPersonName2)
-        var titleView : TextView = findViewById(R.id.editTextTextPersonName3)
+        val subjectView : TextView = findViewById(R.id.editTextTextPersonName2)
+        val titleView : TextView = findViewById(R.id.editTextTextPersonName3)
         //btnPickDate
         //btnPickTime
         //btnIcon
 
         btnCreate = findViewById(R.id.button)
+
+        //binding = ActivityMainBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+
         btnCreate.setOnClickListener {
-            var subject = subjectView.text
-            var title = titleView.text
-            var date = btnPickDate.text
-            var hour = btnPickTime.text
-            var color = btnIcon.background
-            if (subject.toString().trim().isNotEmpty() ||
-                    subject.toString().trim().isNotBlank()) {
-                println("exam: $subject $title time: $date $hour color: $color")
+            val subject = subjectView.text.toString()
+            val title = titleView.text.toString()
+            val date = btnPickDate.text.toString()
+            val time = btnPickTime.text.toString()
+            val color = btnIcon.background.toString()
+
+            if (subject.trim().isNotEmpty() ||
+                    subject.trim().isNotBlank()) {
+                println("exam: $subject $title time: $date $time color: $color")
                 //create new exam (subject, opt: title, date, hour, color)
+                //database = FirebaseDatabase.getInstance().getReference("Exams")
+                val exam = Exam(subject, title, date, time, color)
+                /*database.child(subject).setValue(exam).addOnSuccessListener {
+                    println("success")
+                }.addOnFailureListener {
+                    println("failed")
+                }*/
             } else {
                 Toast.makeText(this, "Please enter a subject", Toast.LENGTH_SHORT).show()
                 println("Please enter a subject")

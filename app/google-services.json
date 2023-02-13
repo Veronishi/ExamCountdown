@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "805110174509",
+    "project_id": "examcountdown-13b60",
+    "storage_bucket": "examcountdown-13b60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805110174509:android:d9c8b2da7db2d5d85479a4",
+        "android_client_info": {
+          "package_name": "com.example.examcountdown"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805110174509-295jig7lo54skr93gl4nr252dkbjqrtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoyYQHnR64Hk7xpAR2Flz_WPfbfX5GO2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805110174509-295jig7lo54skr93gl4nr252dkbjqrtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
