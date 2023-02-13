@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.examcountdown.databinding.ActivityMainBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 //import com.google.firebase.database.DatabaseReference
 //import com.google.firebase.database.FirebaseDatabase
 import com.nvt.color.ColorPickerDialog
@@ -25,7 +27,7 @@ class ExamCreate : AppCompatActivity() {
 
     //firebase
     //private lateinit var binding : ActivityMainBinding
-    //private lateinit var database : DatabaseReference
+    private lateinit var database : DatabaseReference
     //clickable
     private lateinit var btnPickDate : TextView
     private lateinit var btnPickTime : TextView
@@ -112,13 +114,14 @@ class ExamCreate : AppCompatActivity() {
                     subject.trim().isNotBlank()) {
                 println("exam: $subject $title time: $date $time color: $color")
                 //create new exam (subject, opt: title, date, hour, color)
-                //database = FirebaseDatabase.getInstance().getReference("Exams")
+
+                database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
                 val exam = Exam(subject, title, date, time, color)
-                /*database.child(subject).setValue(exam).addOnSuccessListener {
+                database.child("$subject,$title").setValue(exam).addOnSuccessListener {
                     println("success")
                 }.addOnFailureListener {
                     println("failed")
-                }*/
+                }
             } else {
                 Toast.makeText(this, "Please enter a subject", Toast.LENGTH_SHORT).show()
                 println("Please enter a subject")
