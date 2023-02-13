@@ -23,6 +23,7 @@ class ExamCreate : AppCompatActivity() {
     private lateinit var btnPickTime : TextView
     private lateinit var btnAppearance : TextView
     private lateinit var btnIcon : ImageButton
+    private lateinit var btnCreate : Button
     //formatting
     private var formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
     private var formatTime = SimpleDateFormat("HH:mm")
@@ -78,6 +79,30 @@ class ExamCreate : AppCompatActivity() {
         }
         btnIcon.setOnClickListener {
             changeAppearance()
+        }
+
+        //exam creation
+        var subjectView : TextView = findViewById(R.id.editTextTextPersonName2)
+        var titleView : TextView = findViewById(R.id.editTextTextPersonName3)
+        //btnPickDate
+        //btnPickTime
+        //btnIcon
+
+        btnCreate = findViewById(R.id.button)
+        btnCreate.setOnClickListener {
+            var subject = subjectView.text
+            var title = titleView.text
+            var date = btnPickDate.text
+            var hour = btnPickTime.text
+            var color = btnIcon.background
+            if (subject.toString().trim().isNotEmpty() ||
+                    subject.toString().trim().isNotBlank()) {
+                println("exam: $subject $title time: $date $hour color: $color")
+                //create new exam (subject, opt: title, date, hour, color)
+            } else {
+                Toast.makeText(this, "Please enter a subject", Toast.LENGTH_SHORT).show()
+                println("Please enter a subject")
+            }
         }
     }
 
