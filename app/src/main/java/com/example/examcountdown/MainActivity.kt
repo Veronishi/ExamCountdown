@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.example.examcountdown.ui.main.SectionsPagerAdapter
 
-class MainActivity : AppCompatActivity() {
+    class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,4 +26,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         })
     }
-}
+    }

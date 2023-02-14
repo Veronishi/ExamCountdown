@@ -4,22 +4,15 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
-import android.os.Binder
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.examcountdown.databinding.ActivityMainBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-//import com.google.firebase.database.DatabaseReference
-//import com.google.firebase.database.FirebaseDatabase
 import com.nvt.color.ColorPickerDialog
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -54,7 +47,7 @@ class ExamCreate : AppCompatActivity() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         //set current day ad text
-        btnPickDate.text = formatDate.format(c.time)//" $day/${month+1}/$year "
+        btnPickDate.text = formatDate.format(c.time)
 
         btnPickDate.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{ view, year, month, dayOfMonth ->
@@ -99,9 +92,6 @@ class ExamCreate : AppCompatActivity() {
         //btnIcon
 
         btnCreate = findViewById(R.id.button)
-
-        //binding = ActivityMainBinding.inflate(layoutInflater)
-        //setContentView(binding.root)
 
         btnCreate.setOnClickListener {
             val subject = subjectView.text.toString()

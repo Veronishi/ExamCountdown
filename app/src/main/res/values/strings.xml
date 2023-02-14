@@ -10,4 +10,7 @@
     <string name="string_format">hh:mm</string>
     <string name="appearance">Appearance</string>
     <string name="create">Create</string>
+    <string name="remdays">remDays</string>
+    <string name="days_until">days until</string>
+    <string name="date">date</string>
 </resources>
