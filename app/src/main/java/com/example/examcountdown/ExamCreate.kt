@@ -70,13 +70,13 @@ class ExamCreate : AppCompatActivity() {
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val min = c.get(Calendar.MINUTE)
 
-        btnPickTime.text = formatTime.format(c.time)//" $hour:$min "
+        btnPickTime.text = formatTime.format(c.time)
 
         btnPickTime.setOnClickListener {
             val tpd = TimePickerDialog( this, TimePickerDialog.OnTimeSetListener{ view, hourOfDay, minute ->
                 val x = Calendar.getInstance()
-                x.set(1, 1, 1, hourOfDay, minute)
-                btnPickTime.text = formatTime.format(x.time) //need only hours and mins, so other field is set to 1
+                x.set(1, 1, 1, hourOfDay, minute) //need only hours and mins, so other field is set to 1
+                btnPickTime.text = formatTime.format(x.time)
             }, hour, min, true).show()
         }
 
@@ -122,6 +122,8 @@ class ExamCreate : AppCompatActivity() {
                 }.addOnFailureListener {
                     println("failed")
                 }
+                val intent = Intent (this, MainActivity::class.java)
+                startActivity(intent)
             } else {
                 Toast.makeText(this, "Please enter a subject", Toast.LENGTH_SHORT).show()
                 println("Please enter a subject")
