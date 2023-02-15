@@ -30,15 +30,11 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val date : Date = sdf.parse(currentItem.date)
         val currentDate : Date = Date()
         val diff: Long = date.time - currentDate.time
-        println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS))
+        //TODO("if no days display remaining hours")
         if (diff < 0) {
-            holder.remDays.text = "\u2713" //unicode checkmark
+            holder.remDays.text = "\u2713" //unicode check mark
             holder.textView.text = "Complete"
         } else holder.remDays.text = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toString()
-
-        //val days: Int = Days.daysBetween(date, currentDate).getDays()
-        //TODO("calculate missing days")
-        //holder.color.background = currentItem.color
     }
 
     override fun getItemCount(): Int {
@@ -53,7 +49,6 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val backgroud : LinearLayout = itemView.findViewById(R.id.backgound)
         val remDays : TextView = itemView.findViewById(R.id.textView10)
         val textView : TextView = itemView.findViewById(R.id.textView11)
-        //val color : ImageButton = itemView.findViewById(R.id.imageButton)
 
     }
 }
