@@ -80,6 +80,7 @@ class PlaceholderFragment : Fragment() {
                 if(snapshot.exists()){
                     for(userSnapshot in snapshot.children){
                         val exam =  userSnapshot.getValue(Exam::class.java)
+                        //TODO("filter by past and future exam")
                         examArrayList.add(exam!!)
                     }
                     examRecyclerView.adapter = MyAdapter(examArrayList)
@@ -87,7 +88,6 @@ class PlaceholderFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
         })

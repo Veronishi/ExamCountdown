@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -98,7 +99,9 @@ class ExamCreate : AppCompatActivity() {
             val title = titleView.text.toString()
             val date = btnPickDate.text.toString()
             val time = btnPickTime.text.toString()
-            val color = btnIcon.background.toString()
+            //val color = btnIcon.background.toString()
+            val colorDrawable : ColorDrawable = btnIcon.background as ColorDrawable
+            val color : Int = colorDrawable.color
 
             if (subject.trim().isNotEmpty() ||
                     subject.trim().isNotBlank()) {
