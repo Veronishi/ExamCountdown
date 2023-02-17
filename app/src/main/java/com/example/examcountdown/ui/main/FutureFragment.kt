@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.examcountdown.Exam
@@ -14,14 +13,15 @@ import com.example.examcountdown.R
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.TimeUnit
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 class FutureFragment : Fragment() {
 
-    private lateinit var pageViewModel: PageViewModel
+    //private lateinit var pageViewModel: PageViewModel
 
     private lateinit var dbref: DatabaseReference
     private lateinit var examRecyclerView: RecyclerView
@@ -29,9 +29,9 @@ class FutureFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        /*pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
-        }
+        }*/
     }
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ class FutureFragment : Fragment() {
         return root
     }
 
-    companion object {
+    /*companion object {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -71,7 +71,7 @@ class FutureFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     private fun getExamData() {
         dbref = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
@@ -80,11 +80,15 @@ class FutureFragment : Fragment() {
                 if (snapshot.exists()) {
                     for (examSnapshot in snapshot.children) {
                         val exam = examSnapshot.getValue(Exam::class.java)
-                        var sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-                        val date : Date = sdf.parse(exam!!.date)
-                        val currentDate : Date = Date()
+                        val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                        val date: Date = sdf.parse(""+exam!!.date+" "+exam!!.time)
+                        val currentDate: Date = Date()
                         val diff: Long = date.time - currentDate.time
-                        if (diff >= 0) examArrayList.add(exam!!)
+                        val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
+                        val differenceInHours = (TimeUnit.MILLISECONDS.toHours(diff) % 24)
+                        val differenceInDays = (TimeUnit.MILLISECONDS.toDays(diff) % 365)
+                        println("$date - $currentDate = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")
+                        if (diff >= 0) examArrayList.add(exam)
                     }
                     examRecyclerView.adapter = MyAdapter(examArrayList)
                 }
@@ -96,4 +100,5 @@ class FutureFragment : Fragment() {
         })
     }
     //TODO("implement delete exam")
+    //TODO("order by date")
 }

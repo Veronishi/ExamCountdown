@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.examcountdown.ui.main.FutureFragment
-import com.example.examcountdown.ui.main.PageViewModel
+//import com.example.examcountdown.ui.main.PageViewModel
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
  */
 class PastFragment : Fragment() {
 
-    private lateinit var pageViewModel: PageViewModel
+    //private lateinit var pageViewModel: PageViewModel
 
     private lateinit var dbref: DatabaseReference
     private lateinit var examRecyclerView: RecyclerView
@@ -28,9 +28,9 @@ class PastFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        /*pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
-        }
+        }*/
     }
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class PastFragment : Fragment() {
         return root
     }
 
-    companion object {
+    /*companion object {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -66,7 +66,7 @@ class PastFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     private fun getExamData() {
         dbref = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
@@ -75,11 +75,10 @@ class PastFragment : Fragment() {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
                         val exam = userSnapshot.getValue(Exam::class.java)
-                        var sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-                        val date : Date = sdf.parse(exam!!.date)
+                        val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                        val date : Date = sdf.parse(""+exam!!.date+" "+exam!!.time)
                         val currentDate : Date = Date()
                         val diff: Long = date.time - currentDate.time
-                        //TODO("fix: adds to completed even if missing hours")
                         if (diff < 0) examArrayList.add(exam!!)
                     }
                     examRecyclerView.adapter = MyAdapter(examArrayList)

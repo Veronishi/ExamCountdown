@@ -29,8 +29,8 @@ class ExamCreate : AppCompatActivity() {
     private lateinit var btnIcon : ImageButton
     private lateinit var btnCreate : Button
     //formatting
-    private var formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
-    private var formatTime = SimpleDateFormat("HH:mm")
+    private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
+    private val formatTime = SimpleDateFormat("HH:mm")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +40,22 @@ class ExamCreate : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.title = "Add Exam"
 
-        //date picker
-        btnPickDate = findViewById(R.id.btn_pick_date)
-
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
-        //set current day ad text
-        btnPickDate.text = formatDate.format(c.time)
+        val hour = c.get(Calendar.HOUR_OF_DAY)
+        val min = c.get(Calendar.MINUTE)
+        c.add(Calendar.HOUR_OF_DAY, 1)//CET
+        println("exam create "+c.time)
 
+        //set current day ad text
+        btnPickDate = findViewById(R.id.btn_pick_date)
+        btnPickDate.text = formatDate.format(c.time)
+        btnPickTime = findViewById(R.id.btn_pick_hour)
+        btnPickTime.text = formatTime.format(c.time)
+
+        //date picker
         btnPickDate.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{ view, year, month, dayOfMonth ->
                 val x = Calendar.getInstance()
@@ -59,17 +65,10 @@ class ExamCreate : AppCompatActivity() {
         }
 
         //time picker
-        btnPickTime = findViewById(R.id.btn_pick_hour)
-
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val min = c.get(Calendar.MINUTE)
-
-        btnPickTime.text = formatTime.format(c.time)
-
         btnPickTime.setOnClickListener {
             val tpd = TimePickerDialog( this, TimePickerDialog.OnTimeSetListener{ view, hourOfDay, minute ->
                 val x = Calendar.getInstance()
-                x.set(1, 1, 1, hourOfDay, minute) //need only hours and mins, so other field is set to 1
+                x.set(1, 1, 1, hourOfDay, minute) //need only hours and min, so other field is set to 1
                 btnPickTime.text = formatTime.format(x.time)
             }, hour, min, true).show()
         }
