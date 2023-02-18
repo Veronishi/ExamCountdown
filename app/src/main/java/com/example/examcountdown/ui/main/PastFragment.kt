@@ -1,17 +1,17 @@
-package com.example.examcountdown
+package com.example.examcountdown.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.examcountdown.ui.main.FutureFragment
+import com.example.examcountdown.Exam
+import com.example.examcountdown.MyAdapter
+import com.example.examcountdown.R
 //import com.example.examcountdown.ui.main.PageViewModel
 import com.google.firebase.database.*
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 

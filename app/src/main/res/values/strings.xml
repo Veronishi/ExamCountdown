@@ -13,4 +13,6 @@
     <string name="remdays">remDays</string>
     <string name="days_until">days until</string>
     <string name="date">date</string>
+    <string name="delete">Delete</string>
+    <string name="time_format">dd/mm/yyyy hh:mm</string>
 </resources>

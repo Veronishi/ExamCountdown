@@ -1,5 +1,6 @@
 package com.example.examcountdown
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,15 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
                 }
             }
         } else holder.remDays.text = differenceInDays.toString()//(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1).toString()
+        holder.backGround.setOnClickListener { v ->
+            val intent = Intent(v.context, ExamDelete::class.java)
+            //send information no new activity
+            intent.putExtra("subject", holder.subject.text)
+            intent.putExtra("title", holder.title.text)
+            intent.putExtra("date", (holder.date.text))
+            intent.putExtra("examBackground", currentItem.color)
+            v.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +76,7 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val subject : TextView = itemView.findViewById(R.id.textView8)
         val title : TextView = itemView.findViewById(R.id.textView9)
         val date : TextView = itemView.findViewById(R.id.textView12)
-        val backGround : LinearLayout = itemView.findViewById(R.id.backgound)
+        val backGround : LinearLayout = itemView.findViewById(R.id.examBackground)
         val remDays : TextView = itemView.findViewById(R.id.textView10)
         val textView : TextView = itemView.findViewById(R.id.textView11)
 
