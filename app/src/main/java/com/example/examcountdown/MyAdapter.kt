@@ -24,15 +24,15 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val currentItem = examList[position]
         holder.subject.text = currentItem.subject
         holder.title.text = currentItem.title
-        val time = ""+currentItem.date+" "+currentItem.time //format dd/mm/yyyy hh:mm
-        holder.date.text = time
+        val time = sdf.format(currentItem.date)//sdf.parse("" +currentItem.date)//+" "+currentItem.time //format dd/mm/yyyy hh:mm
+        holder.date.text = time.toString()
         holder.backGround.setBackgroundColor(currentItem.color)
-        val date : Date = sdf.parse(""+currentItem.date+" "+currentItem.time)
+        val date : Date = currentItem.date//sdf.parse(""+currentItem.date)
         //val currentDate: Date = Date()
         val c : Calendar = Calendar.getInstance()
         //c.timeZone = TimeZone.getTimeZone("CET")
         c.add(Calendar.HOUR_OF_DAY, 1) //CET
-        println(c.time)
+        //println(c.time)
         val today : Date = c.time
         val diff : Long = date.time - today.time
         val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
@@ -40,12 +40,19 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val differenceInDays = (TimeUnit.MILLISECONDS.toDays(diff) % 365)
         println("$date - $today = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")
         if (differenceInDays <= 0) {
-            if(differenceInHours > 0){
-                holder.remDays.text = differenceInHours.toString()
-                holder.textView.text = "hours until"
-            } else {
-                holder.remDays.text = "\u2713" //unicode check mark
-                holder.textView.text = "completed"
+            when {
+                differenceInHours > 0 -> {
+                    holder.remDays.text = differenceInHours.toString()
+                    holder.textView.text = "hours until"
+                }
+                differenceInMinutes > 0 -> {
+                    holder.remDays.text = differenceInMinutes.toString()
+                    holder.textView.text = "minutes until"
+                }
+                else -> {
+                    holder.remDays.text = "\u2713" //unicode check mark
+                    holder.textView.text = "completed"
+                }
             }
         } else holder.remDays.text = differenceInDays.toString()//(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1).toString()
     }

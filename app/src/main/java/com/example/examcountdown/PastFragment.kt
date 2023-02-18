@@ -70,17 +70,18 @@ class PastFragment : Fragment() {
 
     private fun getExamData() {
         dbref = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
-        dbref.addValueEventListener(object : ValueEventListener {
+        dbref.orderByChild("date/time").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
                         val exam = userSnapshot.getValue(Exam::class.java)
-                        val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
-                        val date : Date = sdf.parse(""+exam!!.date+" "+exam!!.time)
+                        //val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                        val date : Date = Date(exam!!.date.time)//sdf.parse(""+exam!!.date+" "+exam!!.time)
                         val currentDate : Date = Date()
                         val diff: Long = date.time - currentDate.time
-                        if (diff < 0) examArrayList.add(exam!!)
+                        if (diff < 0) examArrayList.add(exam)
                     }
+                    examArrayList.reverse()
                     examRecyclerView.adapter = MyAdapter(examArrayList)
                 }
             }

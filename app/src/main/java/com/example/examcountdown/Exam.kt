@@ -1,6 +1,8 @@
 package com.example.examcountdown
 
-data class Exam(val subject: String? = null, val title: String? = null, val date: String? = null, val time: String? = null, val color: Int = -1) {
+import java.sql.Timestamp
+import java.util.Date
 
-}
-//(subject, opt: title, date, time, color)
+    data class Exam(val subject: String? = null, val title: String? = null, val date: Date = Date(-1), val color: Int = -1)
+    data class ExamDB(val subject: String? = null, val title: String? = null, val date: Timestamp = Timestamp(-1), val color: Int = -1)
+//(subject, opt: title, date, color)

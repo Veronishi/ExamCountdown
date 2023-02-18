@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.nvt.color.ColorPickerDialog
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,6 +32,7 @@ class ExamCreate : AppCompatActivity() {
     //formatting
     private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
     private val formatTime = SimpleDateFormat("HH:mm")
+    private val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALIAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,7 @@ class ExamCreate : AppCompatActivity() {
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val min = c.get(Calendar.MINUTE)
         c.add(Calendar.HOUR_OF_DAY, 1)//CET
-        println("exam create "+c.time)
+        //println("exam create "+c.time)
 
         //set current day ad text
         btnPickDate = findViewById(R.id.btn_pick_date)
@@ -96,20 +98,24 @@ class ExamCreate : AppCompatActivity() {
         btnCreate.setOnClickListener {
             val subject = subjectView.text.toString()
             val title = titleView.text.toString()
-            val date = btnPickDate.text.toString()
+            val examDay = btnPickDate.text.toString()
             val time = btnPickTime.text.toString()
+            val dateString : String = "$examDay $time"
+            val date : Date = sdf.parse(dateString)
             //val color = btnIcon.background.toString()
             val colorDrawable : ColorDrawable = btnIcon.background as ColorDrawable
             val color : Int = colorDrawable.color
 
             if (subject.trim().isNotEmpty() ||
                     subject.trim().isNotBlank()) {
-                println("exam: $subject $title time: $date $time color: $color")
+                println("exam: $subject $title time: $date color: $color")
                 //create new exam (subject, opt: title, date, hour, color)
 
                 database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
-                val exam = Exam(subject, title, date, time, color)
-                database.child("$subject,$title").setValue(exam).addOnSuccessListener {
+                val examTimestamp : Timestamp = Timestamp(date.time)
+                //val exam = Exam(subject, title, date, color)
+                val examDB = ExamDB(subject, title, Timestamp(date.time), color)
+                database.child("$subject,$title").setValue(examDB).addOnSuccessListener {
                     println("success")
                 }.addOnFailureListener {
                     println("failed")

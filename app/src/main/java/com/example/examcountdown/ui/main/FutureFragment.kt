@@ -75,19 +75,19 @@ class FutureFragment : Fragment() {
 
     private fun getExamData() {
         dbref = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
-        dbref.addValueEventListener(object : ValueEventListener {
+        dbref.orderByChild("date/time").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (examSnapshot in snapshot.children) {
                         val exam = examSnapshot.getValue(Exam::class.java)
-                        val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
-                        val date: Date = sdf.parse(""+exam!!.date+" "+exam!!.time)
+                        //val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                        val date: Date = Date(exam!!.date.time) //sdf.parse(""+exam!!.date+" "+exam!!.time)
                         val currentDate: Date = Date()
                         val diff: Long = date.time - currentDate.time
-                        val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
+                        /*val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
                         val differenceInHours = (TimeUnit.MILLISECONDS.toHours(diff) % 24)
                         val differenceInDays = (TimeUnit.MILLISECONDS.toDays(diff) % 365)
-                        println("$date - $currentDate = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")
+                        println("$date - $currentDate = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")*/
                         if (diff >= 0) examArrayList.add(exam)
                     }
                     examRecyclerView.adapter = MyAdapter(examArrayList)
@@ -100,5 +100,4 @@ class FutureFragment : Fragment() {
         })
     }
     //TODO("implement delete exam")
-    //TODO("order by date")
 }
