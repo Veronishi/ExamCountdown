@@ -1,15 +1,19 @@
 package com.example.examcountdown
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import javax.security.auth.Subject
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class ExamDelete  : AppCompatActivity() {
-
+    //database
+    private lateinit var database: DatabaseReference
+    //graphic elements
     private lateinit var deleteBackground : ConstraintLayout
     private lateinit var deleteBTN : Button
     private lateinit var subject : TextView
@@ -19,6 +23,8 @@ class ExamDelete  : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delete)
+
+        supportActionBar!!.title = "Delete Exam"
 
         deleteBackground = findViewById(R.id.deleteBackground)
         deleteBTN = findViewById(R.id.delete_btn)
@@ -40,6 +46,21 @@ class ExamDelete  : AppCompatActivity() {
 
         deleteBTN.setOnClickListener {
             //delete exam
+            var examID = "$subjectText,$titleText"
+            deleteExam(examID)
+            val intent = Intent (this, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun deleteExam(examID : String) {
+        database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
+        database.child(examID).removeValue().addOnSuccessListener {
+            Toast.makeText(this, "Successfully deleted", Toast.LENGTH_SHORT).show()
+            println("delete success")
+        }.addOnFailureListener{
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+            println("delete failed")
         }
     }
 }
