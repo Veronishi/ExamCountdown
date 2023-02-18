@@ -46,7 +46,7 @@ class ExamDelete  : AppCompatActivity() {
 
         deleteBTN.setOnClickListener {
             //delete exam
-            var examID = "$subjectText,$titleText"
+            val examID = "$subjectText,$titleText"
             deleteExam(examID)
             val intent = Intent (this, MainActivity::class.java)
             startActivity(intent)

@@ -25,21 +25,16 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         val currentItem = examList[position]
         holder.subject.text = currentItem.subject
         holder.title.text = currentItem.title
-        val time = sdf.format(currentItem.date)//sdf.parse("" +currentItem.date)//+" "+currentItem.time //format dd/mm/yyyy hh:mm
+        val time = sdf.format(currentItem.date)
         holder.date.text = time.toString()
         holder.backGround.setBackgroundColor(currentItem.color)
-        val date : Date = currentItem.date//sdf.parse(""+currentItem.date)
-        //val currentDate: Date = Date()
-        val c : Calendar = Calendar.getInstance()
-        //c.timeZone = TimeZone.getTimeZone("CET")
-        c.add(Calendar.HOUR_OF_DAY, 1) //CET
-        //println(c.time)
-        val today : Date = c.time
-        val diff : Long = date.time - today.time
+        val date = currentItem.date
+        val currentDate = Date()
+        val diff : Long = date.time - currentDate.time
         val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
         val differenceInHours = (TimeUnit.MILLISECONDS.toHours(diff) % 24)
         val differenceInDays = (TimeUnit.MILLISECONDS.toDays(diff) % 365)
-        println("$date - $today = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")
+        println("$date - $currentDate = $differenceInDays days, $differenceInHours hours, $differenceInMinutes minutes")
         if (differenceInDays <= 0) {
             when {
                 differenceInHours > 0 -> {
@@ -55,7 +50,7 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
                     holder.textView.text = "completed"
                 }
             }
-        } else holder.remDays.text = differenceInDays.toString()//(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1).toString()
+        } else holder.remDays.text = differenceInDays.toString()
         holder.backGround.setOnClickListener { v ->
             val intent = Intent(v.context, ExamDelete::class.java)
             //send information no new activity

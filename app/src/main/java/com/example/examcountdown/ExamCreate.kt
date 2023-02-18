@@ -20,8 +20,7 @@ import java.util.*
 
 class ExamCreate : AppCompatActivity() {
 
-    //firebase
-    //private lateinit var binding : ActivityMainBinding
+    //database
     private lateinit var database : DatabaseReference
     //clickable
     private lateinit var btnPickDate : TextView
@@ -48,8 +47,6 @@ class ExamCreate : AppCompatActivity() {
         val day = c.get(Calendar.DAY_OF_MONTH)
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val min = c.get(Calendar.MINUTE)
-        c.add(Calendar.HOUR_OF_DAY, 1)//CET
-        //println("exam create "+c.time)
 
         //set current day ad text
         btnPickDate = findViewById(R.id.btn_pick_date)
@@ -102,7 +99,6 @@ class ExamCreate : AppCompatActivity() {
             val time = btnPickTime.text.toString()
             val dateString : String = "$examDay $time"
             val date : Date = sdf.parse(dateString)
-            //val color = btnIcon.background.toString()
             val colorDrawable : ColorDrawable = btnIcon.background as ColorDrawable
             val color : Int = colorDrawable.color
 
@@ -113,7 +109,6 @@ class ExamCreate : AppCompatActivity() {
 
                 database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
                 val examTimestamp : Timestamp = Timestamp(date.time)
-                //val exam = Exam(subject, title, date, color)
                 val examDB = ExamDB(subject, title, Timestamp(date.time), color)
                 database.child("$subject,$title").setValue(examDB).addOnSuccessListener {
                     println("success")
