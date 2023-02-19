@@ -7,11 +7,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class ExamDelete : AppCompatActivity() {
-    //database
+    //firebase
+    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     //graphic elements
@@ -55,9 +57,12 @@ class ExamDelete : AppCompatActivity() {
     }
 
     private fun deleteExam(examID: String) {
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser == null) auth.signInAnonymously()
         database =
             FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Exams")
+                .getReference("Exams").child(auth.currentUser?.uid.toString())
         database.child(examID).removeValue().addOnSuccessListener {
             Toast.makeText(this, "Successfully deleted", Toast.LENGTH_SHORT).show()
             println("delete success")
