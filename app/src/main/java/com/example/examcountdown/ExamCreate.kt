@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.nvt.color.ColorPickerDialog
@@ -20,14 +21,17 @@ import java.util.*
 
 class ExamCreate : AppCompatActivity() {
 
-    //database
-    private lateinit var database : DatabaseReference
+    //firebase
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
+
     //clickable
-    private lateinit var btnPickDate : TextView
-    private lateinit var btnPickTime : TextView
-    private lateinit var btnAppearance : TextView
-    private lateinit var btnIcon : ImageButton
-    private lateinit var btnCreate : Button
+    private lateinit var btnPickDate: TextView
+    private lateinit var btnPickTime: TextView
+    private lateinit var btnAppearance: TextView
+    private lateinit var btnIcon: ImageButton
+    private lateinit var btnCreate: Button
+
     //formatting
     private val formatDate = SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN)
     private val formatTime = SimpleDateFormat("HH:mm")
@@ -56,20 +60,38 @@ class ExamCreate : AppCompatActivity() {
 
         //date picker
         btnPickDate.setOnClickListener {
-            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{ view, year, month, dayOfMonth ->
-                val x = Calendar.getInstance()
-                x.set(year, month, dayOfMonth)
-                btnPickDate.text = formatDate.format(x.time)
-            }, year, month, day).show()
+            val dpd = DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    val x = Calendar.getInstance()
+                    x.set(year, month, dayOfMonth)
+                    btnPickDate.text = formatDate.format(x.time)
+                },
+                year,
+                month,
+                day
+            ).show()
         }
 
         //time picker
         btnPickTime.setOnClickListener {
-            val tpd = TimePickerDialog( this, TimePickerDialog.OnTimeSetListener{ view, hourOfDay, minute ->
-                val x = Calendar.getInstance()
-                x.set(1, 1, 1, hourOfDay, minute) //need only hours and min, so other field is set to 1
-                btnPickTime.text = formatTime.format(x.time)
-            }, hour, min, true).show()
+            val tpd = TimePickerDialog(
+                this,
+                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    val x = Calendar.getInstance()
+                    x.set(
+                        1,
+                        1,
+                        1,
+                        hourOfDay,
+                        minute
+                    ) //need only hours and min, so other field is set to 1
+                    btnPickTime.text = formatTime.format(x.time)
+                },
+                hour,
+                min,
+                true
+            ).show()
         }
 
         //appearance
@@ -84,8 +106,8 @@ class ExamCreate : AppCompatActivity() {
         }
 
         //exam creation
-        val subjectView : TextView = findViewById(R.id.editTextTextPersonName2)
-        val titleView : TextView = findViewById(R.id.editTextTextPersonName3)
+        val subjectView: TextView = findViewById(R.id.editTextTextPersonName2)
+        val titleView: TextView = findViewById(R.id.editTextTextPersonName3)
         //btnPickDate
         //btnPickTime
         //btnIcon
@@ -97,25 +119,31 @@ class ExamCreate : AppCompatActivity() {
             val title = titleView.text.toString()
             val examDay = btnPickDate.text.toString()
             val time = btnPickTime.text.toString()
-            val dateString : String = "$examDay $time"
-            val date : Date = sdf.parse(dateString)
-            val colorDrawable : ColorDrawable = btnIcon.background as ColorDrawable
-            val color : Int = colorDrawable.color
+            val dateString: String = "$examDay $time"
+            val date: Date = sdf.parse(dateString)
+            val colorDrawable: ColorDrawable = btnIcon.background as ColorDrawable
+            val color: Int = colorDrawable.color
 
             if (subject.trim().isNotEmpty() ||
-                    subject.trim().isNotBlank()) {
+                subject.trim().isNotBlank()
+            ) {
                 println("exam: $subject $title time: $date color: $color")
                 //create new exam (subject, opt: title, date, hour, color)
 
-                database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
-                val examTimestamp : Timestamp = Timestamp(date.time)
+                auth = FirebaseAuth.getInstance()
+                val currentUser = auth.currentUser
+                if (currentUser == null) auth.signInAnonymously()
+                database =
+                    FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/")
+                        .getReference("Exams").child(auth.currentUser?.uid.toString())
+                val examTimestamp: Timestamp = Timestamp(date.time)
                 val examDB = ExamDB(subject, title, Timestamp(date.time), color)
                 database.child("$subject,$title").setValue(examDB).addOnSuccessListener {
                     println("success")
                 }.addOnFailureListener {
                     println("failed")
                 }
-                val intent = Intent (this, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Please enter a subject", Toast.LENGTH_SHORT).show()

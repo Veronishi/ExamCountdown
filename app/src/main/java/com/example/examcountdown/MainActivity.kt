@@ -1,4 +1,4 @@
-    package com.example.examcountdown
+package com.example.examcountdown
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.example.examcountdown.ui.main.SectionsPagerAdapter
 
-    class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +22,8 @@ import com.example.examcountdown.ui.main.SectionsPagerAdapter
         val fab: FloatingActionButton = findViewById(R.id.fab)
 
         fab.setOnClickListener(View.OnClickListener {
-            val intent = Intent (this, ExamCreate::class.java)
+            val intent = Intent(this, ExamCreate::class.java)
             startActivity(intent)
         })
     }
-    }
+}

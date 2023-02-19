@@ -10,15 +10,16 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-class ExamDelete  : AppCompatActivity() {
+class ExamDelete : AppCompatActivity() {
     //database
     private lateinit var database: DatabaseReference
+
     //graphic elements
-    private lateinit var deleteBackground : ConstraintLayout
-    private lateinit var deleteBTN : Button
-    private lateinit var subject : TextView
-    private lateinit var title : TextView
-    private lateinit var date : TextView
+    private lateinit var deleteBackground: ConstraintLayout
+    private lateinit var deleteBTN: Button
+    private lateinit var subject: TextView
+    private lateinit var title: TextView
+    private lateinit var date: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +49,19 @@ class ExamDelete  : AppCompatActivity() {
             //delete exam
             val examID = "$subjectText,$titleText"
             deleteExam(examID)
-            val intent = Intent (this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun deleteExam(examID : String) {
-        database = FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Exams")
+    private fun deleteExam(examID: String) {
+        database =
+            FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Exams")
         database.child(examID).removeValue().addOnSuccessListener {
             Toast.makeText(this, "Successfully deleted", Toast.LENGTH_SHORT).show()
             println("delete success")
-        }.addOnFailureListener{
+        }.addOnFailureListener {
             Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
             println("delete failed")
         }

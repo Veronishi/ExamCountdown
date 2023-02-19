@@ -12,12 +12,14 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(private val examList: ArrayList<Exam>) :
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     private val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.exam_item, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.exam_item, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -30,7 +32,7 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
         holder.backGround.setBackgroundColor(currentItem.color)
         val date = currentItem.date
         val currentDate = Date()
-        val diff : Long = date.time - currentDate.time
+        val diff: Long = date.time - currentDate.time
         val differenceInMinutes = (TimeUnit.MILLISECONDS.toMinutes(diff) % 60)
         val differenceInHours = (TimeUnit.MILLISECONDS.toHours(diff) % 24)
         val differenceInDays = (TimeUnit.MILLISECONDS.toDays(diff) % 365)
@@ -68,12 +70,12 @@ class MyAdapter(private val examList: ArrayList<Exam>) : RecyclerView.Adapter<My
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //pick elements in exam_item
-        val subject : TextView = itemView.findViewById(R.id.textView8)
-        val title : TextView = itemView.findViewById(R.id.textView9)
-        val date : TextView = itemView.findViewById(R.id.textView12)
-        val backGround : LinearLayout = itemView.findViewById(R.id.examBackground)
-        val remDays : TextView = itemView.findViewById(R.id.textView10)
-        val textView : TextView = itemView.findViewById(R.id.textView11)
+        val subject: TextView = itemView.findViewById(R.id.textView8)
+        val title: TextView = itemView.findViewById(R.id.textView9)
+        val date: TextView = itemView.findViewById(R.id.textView12)
+        val backGround: LinearLayout = itemView.findViewById(R.id.examBackground)
+        val remDays: TextView = itemView.findViewById(R.id.textView10)
+        val textView: TextView = itemView.findViewById(R.id.textView11)
 
     }
 }
