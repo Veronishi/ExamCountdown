@@ -1,16 +1,21 @@
 package com.example.examcountdown
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationBuilderWithBuilderAccessor
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -37,6 +42,7 @@ class ExamCreate : AppCompatActivity() {
     private val formatTime = SimpleDateFormat("HH:mm")
     private val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALIAN)
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_exam)
@@ -127,7 +133,7 @@ class ExamCreate : AppCompatActivity() {
             if (subject.trim().isNotEmpty() ||
                 subject.trim().isNotBlank()
             ) {
-                println("exam: $subject $title time: $date color: $color")
+                //println("exam: $subject $title time: $date color: $color")
                 //create new exam (subject, opt: title, date, hour, color)
 
                 auth = FirebaseAuth.getInstance()
@@ -136,13 +142,24 @@ class ExamCreate : AppCompatActivity() {
                 database =
                     FirebaseDatabase.getInstance("https://examcountdown-13b60-default-rtdb.europe-west1.firebasedatabase.app/")
                         .getReference("Exams").child(auth.currentUser?.uid.toString())
-                val examTimestamp: Timestamp = Timestamp(date.time)
+                //val examTimestamp: Timestamp = Timestamp(date.time)
                 val examDB = ExamDB(subject, title, Timestamp(date.time), color)
                 database.child("$subject,$title").setValue(examDB).addOnSuccessListener {
                     println("success")
                 }.addOnFailureListener {
                     println("failed")
                 }
+
+                //if exam is not in the past, create notification
+                val currentDate = Date()
+                val diff : Long = date.time - currentDate.time
+                if(diff >= 0){
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        createNotificationChannel()
+                    }
+                    scheduleNotification(subject, title, date)
+                }
+
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
@@ -168,5 +185,45 @@ class ExamCreate : AppCompatActivity() {
                 }
             })
         colorPicker.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun scheduleNotification(subject : String, nameExam : String, date : Date)
+    {
+        val intent = Intent(applicationContext, Notification::class.java)
+        val title = "$subject, $nameExam"
+        val message = "Less than 1 day remaining"
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        //val time = time.time
+        val time = Calendar.getInstance()
+        time.time = date
+        time.add(Calendar.DATE, -1)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time.timeInMillis,
+            pendingIntent
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel()
+    {
+        val name = "Notif Channel"
+        val desc = "A Description of the Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelID, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
